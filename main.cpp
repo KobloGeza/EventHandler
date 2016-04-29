@@ -29,7 +29,7 @@ Event_Queue event_queue;
 void processNext() {
 	while (1) {
 		this_thread::sleep_for(std::chrono::seconds(1));
-		cout << __FUNCTION__ << endl;
+		cerr << __FUNCTION__ << endl;
 
 		auto event = event_queue.pop();
 		if (event) {
@@ -38,20 +38,31 @@ void processNext() {
 	}
 }
 
+static int a = 0;
 void createEvent() {
 	while (1) {
 		this_thread::sleep_for(std::chrono::seconds(2));
-		cout << __FUNCTION__ << endl;
+		cerr << __FUNCTION__ << endl;
 
-		event_queue.push(Event_Humidity(10));
+
+		event_queue.push(Event_Humidity(a++));
+
+		if (a==10) a=0;
 	}
+}
+
+void Job1_done() {
+	cerr << __FUNCTION__ << endl;
 }
 
 int main() {
 
-	Job job1;
-	job1.addFilter<Event_Humidity>(
-			[](const Event_Humidity& event) -> bool {return(event.value > 10);}
+	Job job1(true, Job1_done);
+	job1.attachFilter<Event_Humidity>(
+			[](const Event_Humidity& event) -> bool {return(event.value > 2);}
+	);
+	job1.attachFilter<Event_Humidity>(
+			[](const Event_Humidity& event) -> bool {return(event.value > 5);}
 	);
 
 	thread thread_eater(processNext);

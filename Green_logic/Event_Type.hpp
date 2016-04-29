@@ -13,7 +13,7 @@
 class IEvent {
 public:
 	virtual void accept(const Visitor& visitor) = 0;
-	virtual ~Event() {};
+	virtual ~IEvent() {};
 };
 
 template <typename Value_type, typename TEventType>
@@ -29,16 +29,19 @@ public:
 	}
 };
 
-
+/*
+ * USER DEFINED EVENT TYPES
+ */
 
 class Event_RTC : public Event_Type<int, Event_RTC> {
-public:
-	Event_RTC(int value) : Event_Type(value) {};
+	using Event_Type::Event_Type;
 };
 
 class Event_Humidity : public Event_Type<int, Event_Humidity> {
-public:
-	Event_Humidity(int value) :  Event_Type(value) {};
+	using Event_Type::Event_Type;
 };
+
+
+
 
 #endif /* GREEN_LOGIC_EVENT_TYPE_HPP_ */

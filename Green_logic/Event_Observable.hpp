@@ -28,7 +28,7 @@ public:
 		return event_observable;
 	}
 
-	void register_observer(Observer& ob) {
+	void register_observer(Observer&& ob) {
 		observers.push_back(ob);
 	}
 
@@ -38,14 +38,17 @@ public:
 	}
 
 	void notify(const TEventType& event) {
+		std::cout << observers.size() << std::endl;
 		for(auto &ob : observers) {
-
 			if (auto spt = ob.lock()) {
-				ob->notify(event);
-			} else {
-				unregister_observer(ob); //TODO: will it crash?
+				spt->notify(event);
 			}
 		}
+
+		//cleanup ghost filters
+		auto new_end = std::remove_if(observers.begin(), observers.end(),
+				[](Observer& ob){ return (ob.expired()); });
+		observers.erase(new_end, observers.end());
 	}
 
 

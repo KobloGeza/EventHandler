@@ -17,7 +17,7 @@
 using std::queue;
 
 class Event_Queue {
-	using EventPtr 	= std::shared_ptr<Event>;
+	using EventPtr 	= std::shared_ptr<IEvent>;
 	using Queue 	= std::queue<EventPtr>;
 
 	Queue queue;

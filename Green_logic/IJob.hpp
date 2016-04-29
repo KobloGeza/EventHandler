@@ -8,11 +8,11 @@
 #ifndef GREEN_LOGIC_IJOB_HPP_
 #define GREEN_LOGIC_IJOB_HPP_
 
-class Filter;
+class IFilter;
 
 class IJob {
 public:
-	virtual void passed(Filter&) = 0;
+	virtual void passed(IFilter&) = 0;
 	virtual ~IJob() {};
 };
 
